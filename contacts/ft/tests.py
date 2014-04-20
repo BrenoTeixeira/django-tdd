@@ -53,3 +53,58 @@ class AdminTest(LiveServerTestCase):
         # user verifies successful message
         self.get_body_context()
         self.assertIn('The user "new_user" was added successfully', self.body.text)
+
+    def test_create_contact_admin(self):
+        self.browser.get(self.live_server_url + '/admin/')
+        username_field = self.browser.find_element_by_name('username')
+        username_field.send_keys('admin')
+        password_field = self.browser.find_element_by_name('password')
+        password_field.send_keys('123456')
+        password_field.send_keys(Keys.RETURN)
+        # user verifies that user_contacts is present
+        body = self.browser.find_element_by_tag_name('body')
+        self.assertIn('User_Contacts', body.text)
+        # user clicks on the Person link
+        person_link = self.browser.find_element_by_link_text('Persons')
+        person_link.click()
+        # user clicks on the Add person link
+        add_person_link = self.browser.find_element_by_link_text('Add person')
+        add_person_link.click()
+        # user fills out the form
+        self.browser.find_element_by_tag_name('first_name').send_keys('Breno')
+        self.browser.find_element_by_tag_name('last_name').send_keys('Teixeira')
+        self.browser.find_element_by_tag_name('email').send_keys('brenotx@gmail.com')
+        self.browser.find_element_by_tag_name('address').send_keys('2227 Lexington Ave')
+        self.browser.find_element_by_tag_name('city').send_keys('San Francisco')
+        self.browser.find_element_by_tag_name('state').send_keys('CA')
+        self.browser.find_element_by_tag_name('country').send_keys('United States')
+        # user clicks the save button
+        self.browser.find_element_by_css_selector('input[value="Save"]').click()
+        # the person has been added
+        self.get_body_context()
+        self.assertIn('Teixeira, Breno', self.body.text)
+        # user returns the main admin screen
+        home_link = self.browser.find_element_by_link_text('Home')
+        home_link.click()
+        # user clicks on the Phone link
+        persons_links = self.browser.find_elements_by_link_text('Phones')
+        persons_links.click()
+        # user clicks on the Add phone link
+        add_person_link = self.browser.find_element_by_link_text('Add phone')
+        add_person_link.click()
+        # user finds the person in the dropdown
+        el = self.browser.find_element_by_name("person")
+        for option in el.find_elements_by_tag_name('option'):
+            if option.text == 'Herman, Michael':
+                option.click()
+        # user adds the phone numbers
+        self.browser.find_element_by_name('number').send_keys("4158888888")
+        # user clicks the save button
+        self.browser.find_element_by_css_selector("input[value='Save']").click()
+        # the Phone has been added
+        self.get_body_context()
+        self.assertIn('4158888888', self.body.text)
+        # user logs out
+        self.browser.find_element_by_link_text('Log out').click()
+        self.get_body_context()
+        self.assertIn('Thanks for spending some quality time with the Web site today.', self.body.text)
