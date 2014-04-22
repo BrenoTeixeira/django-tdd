@@ -71,13 +71,13 @@ class AdminTest(LiveServerTestCase):
         add_person_link = self.browser.find_element_by_link_text('Add person')
         add_person_link.click()
         # user fills out the form
-        self.browser.find_element_by_tag_name('first_name').send_keys('Breno')
-        self.browser.find_element_by_tag_name('last_name').send_keys('Teixeira')
-        self.browser.find_element_by_tag_name('email').send_keys('brenotx@gmail.com')
-        self.browser.find_element_by_tag_name('address').send_keys('2227 Lexington Ave')
-        self.browser.find_element_by_tag_name('city').send_keys('San Francisco')
-        self.browser.find_element_by_tag_name('state').send_keys('CA')
-        self.browser.find_element_by_tag_name('country').send_keys('United States')
+        self.browser.find_element_by_name('first_name').send_keys('Breno')
+        self.browser.find_element_by_name('last_name').send_keys('Teixeira')
+        self.browser.find_element_by_name('email').send_keys('brenotx@gmail.com')
+        self.browser.find_element_by_name('address').send_keys('2227 Lexington Ave')
+        self.browser.find_element_by_name('city').send_keys('San Francisco')
+        self.browser.find_element_by_name('state').send_keys('CA')
+        self.browser.find_element_by_name('country').send_keys('United States')
         # user clicks the save button
         self.browser.find_element_by_css_selector('input[value="Save"]').click()
         # the person has been added
@@ -88,14 +88,14 @@ class AdminTest(LiveServerTestCase):
         home_link.click()
         # user clicks on the Phone link
         persons_links = self.browser.find_elements_by_link_text('Phones')
-        persons_links.click()
+        persons_links[0].click()
         # user clicks on the Add phone link
         add_person_link = self.browser.find_element_by_link_text('Add phone')
         add_person_link.click()
         # user finds the person in the dropdown
         el = self.browser.find_element_by_name("person")
         for option in el.find_elements_by_tag_name('option'):
-            if option.text == 'Herman, Michael':
+            if option.text == 'Teixeira, Breno':
                 option.click()
         # user adds the phone numbers
         self.browser.find_element_by_name('number').send_keys("4158888888")
